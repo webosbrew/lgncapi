@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "GST Sample Launch",
+            "type": "gdb",
+            "request": "launch",
+            "target": "sample-gst",
+            "cwd": "${workspaceRoot}",
+            "valuesFormatting": "parseText",
+            "arguments": "{\\\"@system_native_app\\\":true,\\\"nid\\\":\\\"org.webosbrew.sample.lgncapi-gst\\\"}",
+            "pathSubstitutions": {
+                "/media/developer/apps/usr/palm/applications/org.webosbrew.sample.lgncapi-gst": "${workspaceFolder}",
+                "/usr/src/debug/lib32-": "/opt/webos-sdk-x86_64/1.0.g/sysroots/armv7a-neon-webos-linux-gnueabi/usr/src/debug/",
+                "/usr/src/debug/lib32-glibc": "/opt/webos-sdk-x86_64/1.0.g/sysroots/armv7a-neon-webos-linux-gnueabi/usr/src/debug/glibc",
+                "/usr/src/debug/lib32-pmloglib": "/opt/webos-sdk-x86_64/1.0.g/sysroots/armv7a-neon-webos-linux-gnueabi/usr/src/debug/pmloglib",
+                "/usr/src/debug": "/opt/webos-sdk-x86_64/1.0.g/sysroots/armv7a-neon-webos-linux-gnueabi/usr/src/debug"
+            },
+            "preLaunchTask": "GST Sample Install",
+            "ssh": {
+                "host": "192.168.4.104",
+                "port": 9922,
+                "forwardX11": false,
+                "cwd": "/media/developer/apps/usr/palm/applications/org.webosbrew.sample.lgncapi-gst",
+                "keyfile": "/home/mariotaku/.ssh/hometv_webos_unlocked",
+                "user": "prisoner",
+                "bootstrap": "source /media/developer/apps/usr/palm/applications/org.webosbrew.sample.lgncapi-gst/assets/debug.env"
+            },
+        }
+    ]
+}

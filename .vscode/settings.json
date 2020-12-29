@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "glib.h": "c",
+        "lgnc_directaudio.h": "c",
+        "stddef.h": "c"
+    }
+}
