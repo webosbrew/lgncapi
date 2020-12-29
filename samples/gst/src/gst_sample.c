@@ -123,9 +123,7 @@ GstFlowReturn videoNewPreroll(GstAppSink *appsink, gpointer user_data)
     GstSample *preroll = gst_app_sink_pull_preroll(appsink);
     GstCaps *caps = gst_sample_get_caps(preroll);
     GstStructure *cap = gst_caps_get_structure(caps, 0);
-    int channels = 0;
     g_message(gst_caps_to_string(caps));
-
     int width, height;
     g_assert(gst_structure_get_int(cap, "width", &width));
     g_assert(gst_structure_get_int(cap, "height", &height));
