@@ -113,9 +113,9 @@ struct LGNC_SYSTEM_CALLBACKS_T
 {
     LGNC_STATUS_T(*pfnMsgHandler)
     (LGNC_MSG_TYPE_T msg, unsigned int submsg, char *pData, unsigned short dataSize);
-    unsigned int (*pfnKeyEventCallback)(unsigned int, LGNC_KEY_COND_T, LGNC_ADDITIONAL_INPUT_INFO_T *);
-    unsigned int (*pfnMouseEventCallback)(int, int, unsigned int, LGNC_KEY_COND_T, LGNC_ADDITIONAL_INPUT_INFO_T *);
-    void (*pfnJoystickEventCallback)(LGNC_ADDITIONAL_INPUT_INFO_T *);
+    unsigned int (*pfnKeyEventCallback)(unsigned int key, LGNC_KEY_COND_T keyCond, LGNC_ADDITIONAL_INPUT_INFO_T *keyInput);
+    unsigned int (*pfnMouseEventCallback)(int posX, int posY, unsigned int key, LGNC_KEY_COND_T keyCond, LGNC_ADDITIONAL_INPUT_INFO_T *keyInput);
+    void (*pfnJoystickEventCallback)(LGNC_ADDITIONAL_INPUT_INFO_T *e);
 };
 
 typedef struct LGNC_CTRL_INFO LGNC_CTRL_INFO, *PLGNC_CTRL_INFO;

@@ -1,4 +1,5 @@
 #include "gst_sample.h"
+#include "main.h"
 
 #include <memory.h>
 #include <stdlib.h>
@@ -8,6 +9,9 @@
 #include <lgnc_directvideo.h>
 
 static GstElement *pipeline;
+static GstBus *bus;
+
+static void cb_message(GstBus *bus, GstMessage *message, gpointer user_data);
 
 int gst_sample_initialize()
 {
@@ -41,6 +45,10 @@ int gst_sample_initialize()
     };
     gst_app_sink_set_callbacks(GST_APP_SINK(videosink), &videoCallbacks, NULL, NULL);
 
+    bus = gst_pipeline_get_bus(GST_PIPELINE(pipeline));
+    gst_bus_add_signal_watch(bus);
+    g_signal_connect(bus, "message", (GCallback)cb_message, pipeline);
+
     /* Start playing */
     ret = gst_element_set_state(pipeline, GST_STATE_PLAYING);
     if (ret == GST_STATE_CHANGE_FAILURE)
@@ -51,45 +59,6 @@ int gst_sample_initialize()
     }
 
     return 0;
-}
-
-int gst_sample_wait_for_eos()
-{
-    GstBus *bus;
-    GstMessage *msg;
-
-    /* Wait until error or EOS */
-    bus = gst_element_get_bus(pipeline);
-    msg = gst_bus_timed_pop_filtered(bus, GST_CLOCK_TIME_NONE, GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
-
-    /* Parse message */
-    if (msg != NULL)
-    {
-        GError *err;
-        gchar *debug_info;
-
-        switch (GST_MESSAGE_TYPE(msg))
-        {
-        case GST_MESSAGE_ERROR:
-            gst_message_parse_error(msg, &err, &debug_info);
-            g_printerr("Error received from element %s: %s\n", GST_OBJECT_NAME(msg->src), err->message);
-            g_printerr("Debugging information: %s\n", debug_info ? debug_info : "none");
-            g_clear_error(&err);
-            g_free(debug_info);
-            break;
-        case GST_MESSAGE_EOS:
-            g_print("End-Of-Stream reached.\n");
-            break;
-        default:
-            /* We should not reach here because we only asked for ERRORs and EOS */
-            g_printerr("Unexpected message received.\n");
-            break;
-        }
-        gst_message_unref(msg);
-    }
-
-    /* Free resources */
-    gst_object_unref(bus);
 }
 
 int gst_sample_finalize()
@@ -189,4 +158,24 @@ GstFlowReturn videoNewSample(GstAppSink *appsink, gpointer user_data)
     gst_buffer_unmap(buf, &info);
     gst_sample_unref(sample);
     return ncret == 0 ? GST_FLOW_OK : GST_FLOW_ERROR;
+}
+
+/* called when a new message is posted on the bus */
+void cb_message(GstBus *bus, GstMessage *message, gpointer user_data)
+{
+    GstElement *pipeline = GST_ELEMENT(user_data);
+
+    switch (GST_MESSAGE_TYPE(message))
+    {
+    case GST_MESSAGE_ERROR:
+        g_print("we received an error!\n");
+        request_exit();
+        break;
+    case GST_MESSAGE_EOS:
+        g_print("we reached EOS\n");
+        request_exit();
+        break;
+    default:
+        break;
+    }
 }

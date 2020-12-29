@@ -1,4 +1,5 @@
 #include "graphics.h"
+#include "main.h"
 
 #include <stddef.h>
 #include <stdlib.h>
@@ -33,7 +34,7 @@ int open_display(int width, int height, EGLNativeWindowType displayId)
 
 int gfx_loop()
 {
-    while (1)
+    while (!exit_requested())
     {
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

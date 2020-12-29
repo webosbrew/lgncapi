@@ -4,7 +4,6 @@
 #include <gst/app/app.h>
 
 int gst_sample_initialize();
-int gst_sample_wait_for_eos();
 int gst_sample_finalize();
 
 void audioEos(GstAppSink *appsink, void *userData);

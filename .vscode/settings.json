@@ -2,6 +2,7 @@
     "files.associations": {
         "glib.h": "c",
         "lgnc_directaudio.h": "c",
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "main.h": "c"
     }
 }

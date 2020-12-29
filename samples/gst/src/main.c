@@ -1,11 +1,14 @@
 #include <glib-2.0/glib.h>
 #include <lgnc_system.h>
 
+#include "main.h"
 #include "callbacks.h"
 #include "graphics.h"
 #include "gst_sample.h"
 
 #include "debughelper.h"
+
+static int exit_requested_;
 
 int main(int argc, char *argv[])
 {
@@ -18,8 +21,8 @@ int main(int argc, char *argv[])
     LGNC_SYSTEM_CALLBACKS_T callbacks = {
         .pfnJoystickEventCallback = NULL,
         .pfnMsgHandler = _MsgEventHandler,
-        .pfnKeyEventCallback = NULL,
-        .pfnMouseEventCallback = NULL};
+        .pfnKeyEventCallback = _KeyEventCallback,
+        .pfnMouseEventCallback = _MouseEventCallback};
     g_message("LGNC_SYSTEM_Initialize", NULL);
     ncret = LGNC_SYSTEM_Initialize(argc, argv, &callbacks);
     g_message("LGNC_SYSTEM_Initialize done. ret=%d", ncret, NULL);
@@ -52,4 +55,14 @@ int main(int argc, char *argv[])
 finalize:
     LGNC_SYSTEM_Finalize();
     return 0;
+}
+
+void request_exit()
+{
+    exit_requested_ = 1;
+}
+
+int exit_requested()
+{
+    return exit_requested_;
 }
