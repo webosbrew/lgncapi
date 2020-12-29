@@ -2,6 +2,7 @@
 
 #include <memory.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include <lgnc_directaudio.h>
 #include <lgnc_directvideo.h>
@@ -14,8 +15,8 @@ int gst_sample_initialize()
 
     GstElement *audiosink, *videosink;
     pipeline = gst_parse_launch("filesrc location=./assets/test.mp4 ! qtdemux name=demux \
-    demux.audio_0 ! queue ! decodebin ! audioconvert ! audio/x-raw,format=S16LE ! appsink name=audsink \
-    demux.video_0 ! queue ! h264parse ! appsink name=vidsink",
+    demux.audio_0 ! queue ! aacparse ! audio/mpeg,mpegversion=4,stream-format=adts ! appsink name=audsink \
+    demux.video_0 ! queue ! h264parse config-interval=-1 ! video/x-h264,stream-format=byte-stream,alignment=nal ! appsink name=vidsink",
                                 NULL);
 
     g_assert(pipeline);
@@ -115,7 +116,7 @@ GstFlowReturn audioNewPreroll(GstAppSink *appsink, gpointer user_data)
     gst_sample_unref(preroll);
 
     LGNC_ADEC_DATA_INFO_T info = {
-        .codec = LGNC_ADEC_FMT_PCM,
+        .codec = LGNC_ADEC_FMT_AAC,
         .AChannel = LGNC_ADEC_CH_INDEX_MAIN,
         .samplingFreq = LGNC_ADEC_SAMPLING_FREQ_OF(rate),
         .numberOfChannel = channels,
@@ -133,14 +134,12 @@ GstFlowReturn audioNewSample(GstAppSink *appsink, gpointer user_data)
 
     GstBuffer *buf = gst_sample_get_buffer(sample);
 
-    gsize bufsize = gst_buffer_get_size(buf);
-    gpointer rawbuf = malloc(bufsize);
+    GstMapInfo info;
+    gst_buffer_map(buf, &info, GST_MAP_READ);
 
-    gst_buffer_extract(buf, 0, rawbuf, bufsize);
+    int ncret = LGNC_DIRECTAUDIO_Play(info.data, info.size);
 
-    int ncret = LGNC_DIRECTAUDIO_Play(rawbuf, bufsize);
-
-    free(rawbuf);
+    gst_buffer_unmap(buf, &info);
     gst_sample_unref(sample);
     return ncret == 0 ? GST_FLOW_OK : GST_FLOW_ERROR;
 }
@@ -182,14 +181,20 @@ GstFlowReturn videoNewSample(GstAppSink *appsink, gpointer user_data)
 
     GstBuffer *buf = gst_sample_get_buffer(sample);
 
-    gsize bufsize = gst_buffer_get_size(buf);
-    gpointer rawbuf = malloc(bufsize);
+    GstMapInfo info;
+    gst_buffer_map(buf, &info, GST_MAP_READ);
 
-    gst_buffer_extract(buf, 0, rawbuf, bufsize);
+    printf("Sending frame: ");
+    for (int i = 0; i < 16; i++)
+    {
+        unsigned char c = ((char *)info.data)[i];
+        printf("%02x ", c);
+    }
+    printf("\n");
 
-    int ncret = LGNC_DIRECTVIDEO_Play(rawbuf, bufsize, 0x20000, 0x32270);
-
-    free(rawbuf);
+    int ncret = LGNC_DIRECTVIDEO_Play(info.data, info.size);
+    
+    gst_buffer_unmap(buf, &info);
     gst_sample_unref(sample);
     return ncret == 0 ? GST_FLOW_OK : GST_FLOW_ERROR;
 }

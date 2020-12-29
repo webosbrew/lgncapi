@@ -33,4 +33,4 @@ typedef struct LGNC_VDEC_DATA_INFO LGNC_VDEC_DATA_INFO_T;
 
 int LGNC_DIRECTVIDEO_Close();
 int LGNC_DIRECTVIDEO_Open(LGNC_VDEC_DATA_INFO_T *info);
-int LGNC_DIRECTVIDEO_Play(void *data, unsigned int size, int param_3, int param_4);
+int LGNC_DIRECTVIDEO_Play(void *data, unsigned int size);
