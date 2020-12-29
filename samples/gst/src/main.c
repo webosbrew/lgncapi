@@ -1,40 +1,16 @@
-#include <stdlib.h>
-#include <stdio.h>
-
 #include <glib-2.0/glib.h>
 #include <lgnc_system.h>
-#include <stdio.h>
-
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <string.h>
 
 #include "callbacks.h"
 #include "graphics.h"
 #include "gst_sample.h"
 
-__attribute__((constructor)) static void constructor()
-{
-    int fdout = open("/tmp/lgnc.gst-sample.out.log", O_RDWR | O_CREAT | O_APPEND, 0666);
-    int fderr = open("/tmp/lgnc.gst-sample.err.log", O_RDWR | O_CREAT | O_APPEND, 0666);
-    // make stdout go to file
-    dup2(fdout, 1);
-    // make stderr go to file
-    dup2(fderr, 2);
-
-    // fd no longer needed - the dup'ed handles are sufficient
-    close(fdout);
-    close(fderr);
-}
-__attribute__((destructor)) static void destructor()
-{
-    printf("Bye!\n");
-}
+#include "debughelper.h"
 
 int main(int argc, char *argv[])
 {
+    REDIR_STDOUT("lgnc.gst-sample");
+
     gst_init(&argc, &argv);
 
     int ncret = 0;

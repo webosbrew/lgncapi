@@ -21,6 +21,7 @@ target_include_directories(sample-gst PRIVATE src)
 target_link_libraries(sample-gst lgncopenapi PkgConfig::GLib PkgConfig::GStreamer PkgConfig::OpenGL PkgConfig::json)
 
 target_compile_definitions(sample-gst PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
+target_include_directories(sample-gst PRIVATE ${CMAKE_SOURCE_DIR}/utils/include)
 
 set_target_properties(sample-gst PROPERTIES
     WEBOS_APPINFO_ID org.webosbrew.sample.lgncapi-gst
