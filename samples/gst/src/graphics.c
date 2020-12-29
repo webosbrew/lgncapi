@@ -12,6 +12,8 @@ EGLConfig g_pstEglConfig = NULL;
 EGLSurface g_pstEglSurface = NULL;
 EGLContext g_pstEglContext = NULL;
 
+GLuint g_TextureID[2];
+
 int open_display(int width, int height, EGLNativeWindowType displayId)
 {
     if (init_egl(displayId) == 0)
@@ -19,22 +21,23 @@ int open_display(int width, int height, EGLNativeWindowType displayId)
         finalize_egl();
         return -1;
     }
-    glClearColor(1.0, 1.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glFlush();
-    LGNC_eglSwapBuffers(g_pstEglDisplay, g_pstEglSurface);
+
+    glEnable(GL_CULL_FACE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glClearColor(0, 0, 0, 0);
+    glClearDepthf(1.0f);
+    glColorMask(1, 1, 1, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     return 0;
 }
 
 int gfx_loop()
 {
-
     while (1)
     {
-        glClearColor(1.0, 1.0, 0.0, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glFlush();
-        eglSwapBuffers(g_pstEglDisplay, g_pstEglSurface);
+        glClearColor(0, 0, 0, 0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        LGNC_eglSwapBuffers(g_pstEglDisplay, g_pstEglSurface);
         usleep(16 * 1000);
     }
 
@@ -48,11 +51,16 @@ int init_egl(EGLNativeWindowType displayId)
     int i;
 
     EGLint configAttributes[] = {
-        EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
         EGL_RED_SIZE, 8,
         EGL_GREEN_SIZE, 8,
         EGL_BLUE_SIZE, 8,
-        EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+        EGL_ALPHA_SIZE, 8,
+        EGL_DEPTH_SIZE, 0x18,
+        EGL_STENCIL_SIZE, 0,
+        EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+        EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
+        EGL_SAMPLE_BUFFERS, 1,
+        EGL_SAMPLES, 4,
         EGL_NONE};
 
     static const EGLint contextAttributes[] = {

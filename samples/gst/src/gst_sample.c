@@ -14,7 +14,7 @@ int gst_sample_initialize()
     GstStateChangeReturn ret;
 
     GstElement *audiosink, *videosink;
-    pipeline = gst_parse_launch("filesrc location=./assets/test.mp4 ! qtdemux name=demux \
+    pipeline = gst_parse_launch("curlhttpsrc location=http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 ! qtdemux name=demux \
     demux.audio_0 ! queue ! aacparse ! audio/mpeg,mpegversion=4,stream-format=adts ! appsink name=audsink \
     demux.video_0 ! queue ! h264parse config-interval=-1 ! video/x-h264,stream-format=byte-stream,alignment=nal ! appsink name=vidsink",
                                 NULL);
@@ -184,16 +184,8 @@ GstFlowReturn videoNewSample(GstAppSink *appsink, gpointer user_data)
     GstMapInfo info;
     gst_buffer_map(buf, &info, GST_MAP_READ);
 
-    printf("Sending frame: ");
-    for (int i = 0; i < 16; i++)
-    {
-        unsigned char c = ((char *)info.data)[i];
-        printf("%02x ", c);
-    }
-    printf("\n");
-
     int ncret = LGNC_DIRECTVIDEO_Play(info.data, info.size);
-    
+
     gst_buffer_unmap(buf, &info);
     gst_sample_unref(sample);
     return ncret == 0 ? GST_FLOW_OK : GST_FLOW_ERROR;
