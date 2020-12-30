@@ -12,4 +12,7 @@ set_target_properties(lgncopenapi PROPERTIES
     IMPORTED_LOCATION                  ${CMAKE_CURRENT_SOURCE_DIR}/lib/liblgncopenapi.so
 )
 
-add_subdirectory(samples)
+# Don't include samples if used as library
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    add_subdirectory(samples)
+endif()
