@@ -34,8 +34,3 @@ set_target_properties(sample-gst PROPERTIES
 )
 
 target_webos_package(sample-gst)
-
-add_custom_target(webos-install-sample-gst
-    COMMAND ares-install -d hometv ${CMAKE_CURRENT_BINARY_DIR}/org.webosbrew.sample.lgncapi-gst_0.0.1_arm.ipk
-    DEPENDS webos-package-sample-gst
-)
