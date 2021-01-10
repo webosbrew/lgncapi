@@ -9,8 +9,8 @@ struct LGNC_GAMEPAD_INFO_T
 
 typedef struct LGNC_GAMEPAD_INFO_T LGNC_GAMEPAD_INFO;
 
-typedef void (*GamePadEventCallback)(LGNC_ADDITIONAL_INPUT_INFO_T *e);
-typedef void (*GamePadHotPlugCallback)(LGNC_GAMEPAD_INFO *gamepad, int count);
+typedef void(GamePadEventCallback)(LGNC_ADDITIONAL_INPUT_INFO_T *e);
+typedef void(GamePadHotPlugCallback)(LGNC_GAMEPAD_INFO *gamepad, int count);
 
 int LGNC_GAMEPAD_RegisterCallback(GamePadEventCallback *, GamePadHotPlugCallback *);
 int LGNC_GAMEPAD_UnregisterCallback();
