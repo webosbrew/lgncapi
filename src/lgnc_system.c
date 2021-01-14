@@ -21,14 +21,14 @@ int LGNC_SYSTEM_Initialize(int argc, char **argv, LGNC_SYSTEM_CALLBACKS_T *callb
 {
     if (!_lgncopenapi_so)
     {
-        _lgncopenapi_so = dlopen("lgncopenapi.so", RTLD_NOW);
+        _lgncopenapi_so = dlopen("liblgncopenapi.so", RTLD_NOW);
         if (!_lgncopenapi_so)
         {
             return -1;
         }
         _LGNC_SYSTEM_Initialize = dlsym(_lgncopenapi_so, "LGNC_SYSTEM_Initialize");
         _LGNC_SYSTEM_Finalize = dlsym(_lgncopenapi_so, "LGNC_SYSTEM_Finalize");
-        
+
         _LGNC_DIRECTAUDIO_CheckBuffer = dlsym(_lgncopenapi_so, "LGNC_DIRECTAUDIO_CheckBuffer");
         _LGNC_DIRECTAUDIO_Close = dlsym(_lgncopenapi_so, "LGNC_DIRECTAUDIO_Close");
         _LGNC_DIRECTAUDIO_Open = dlsym(_lgncopenapi_so, "LGNC_DIRECTAUDIO_Open");
@@ -38,11 +38,16 @@ int LGNC_SYSTEM_Initialize(int argc, char **argv, LGNC_SYSTEM_CALLBACKS_T *callb
         _LGNC_DIRECTVIDEO_Open = dlsym(_lgncopenapi_so, "LGNC_DIRECTVIDEO_Open");
         _LGNC_DIRECTVIDEO_Play = dlsym(_lgncopenapi_so, "LGNC_DIRECTVIDEO_Play");
     }
-    _LGNC_SYSTEM_Initialize(argc, argv, callbacks);
+    return (int) _LGNC_SYSTEM_Initialize(argc, argv, callbacks);
 }
 
 int LGNC_SYSTEM_Finalize(void)
 {
-    _LGNC_SYSTEM_Finalize();
+    if (!_lgncopenapi_so)
+    {
+        return -1;
+    }
+    int ret = (int)_LGNC_SYSTEM_Finalize();
     dlclose(_lgncopenapi_so);
+    return ret;
 }
