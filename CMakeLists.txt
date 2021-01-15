@@ -1,8 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
-
-# Add folder where are supportive functions
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/utils/cmake)
-
+cmake_minimum_required(VERSION 3.6)
 project(lgncapi C)
 
 set(PROJECT_NAME "lgncapi")
@@ -55,6 +51,9 @@ install(TARGETS lgncopenapi
     ARCHIVE       DESTINATION "${LIB_INSTALL_DIR}"
     PUBLIC_HEADER DESTINATION "${INCLUDE_INSTALL_DIR}"
 )
+
+# Add folder where are supportive functions
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/utils/cmake)
 
 # Don't include samples if used as library
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
