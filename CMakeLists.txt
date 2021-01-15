@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.0)
 
 # Add folder where are supportive functions
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/utils/cmake)
@@ -22,19 +22,20 @@ set(INCLUDE_INSTALL_DIR include CACHE STRING "Header installation directory rela
 set(HEADERS 
     "include/lgnc_directaudio.h"
     "include/lgnc_directvideo.h"
+    "include/lgnc_egl.h"
     "include/lgnc_system.h"
 )
 
 set(SRC 
     "src/lgnc_directaudio.c"
     "src/lgnc_directvideo.c"
+    "src/lgnc_egl.c"
     "src/lgnc_system.c"
 )
 
 add_library(lgncopenapi ${HEADERS} ${SRC})
 
 set_target_properties(lgncopenapi PROPERTIES
-    PUBLIC_HEADER         ${HEADERS}
     VERSION               ${PROJECT_VERSION}
     SOVERSION             ${PROJECT_VERSION_MAJOR}
 )

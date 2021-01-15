@@ -30,7 +30,7 @@ set_target_properties(sample-gst PROPERTIES
     WEBOS_APPINFO_ICON ${CMAKE_CURRENT_SOURCE_DIR}/icon.png
     WEBOS_APPINFO_TITLE "LGNC GST"
     WEBOS_APPINFO_EXTRA "resolution=1280x720;uiRevision=2"
-    WEBOS_PACKAGE_ASSETS "appconfig.json"
+    WEBOS_PACKAGE_ASSETS "appconfig.json;lib"
 )
 
 target_webos_package(sample-gst)
