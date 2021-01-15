@@ -84,5 +84,5 @@ int LGNC_SYSTEM_Finalize(void)
 
 int LGNC_SYSTEM_GetDisplayId(int *displayId)
 {
-    return _LGNC_SYSTEM_GetDisplayId(displayId);
+    return (int) _LGNC_SYSTEM_GetDisplayId(displayId);
 }
