@@ -8,7 +8,7 @@ int LGNC_DIRECTAUDIO_CheckBuffer()
 
 int LGNC_DIRECTAUDIO_Close()
 {
-    return (int)_LGNC_DIRECTVIDEO_Close();
+    return (int)_LGNC_DIRECTAUDIO_Close();
 }
 
 int LGNC_DIRECTAUDIO_Open(LGNC_ADEC_DATA_INFO_T *info)

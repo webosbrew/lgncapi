@@ -3,7 +3,7 @@
 
 int LGNC_DIRECTVIDEO_Close()
 {
-    return (int)_LGNC_DIRECTAUDIO_Close();
+    return (int)_LGNC_DIRECTVIDEO_Close();
 }
 
 int LGNC_DIRECTVIDEO_Open(LGNC_VDEC_DATA_INFO_T *info)
