@@ -2,7 +2,7 @@
 
 #include <EGL/egl.h>
 
-EGLDisplay LGNC_eglGetDisplay();
+EGLDisplay LGNC_eglGetDisplay(int windowId);
 EGLBoolean LGNC_eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor);
 EGLBoolean LGNC_eglTerminate(EGLDisplay dpy);
 

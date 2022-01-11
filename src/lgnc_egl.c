@@ -1,9 +1,9 @@
 #include "lgnc_egl.h"
 #include "lgnc_wrapper.h"
 
-EGLDisplay LGNC_eglGetDisplay()
+EGLDisplay LGNC_eglGetDisplay(int windowId)
 {
-    return (EGLDisplay)_LGNC_eglGetDisplay();
+    return (EGLDisplay)_LGNC_eglGetDisplay(windowId);
 }
 EGLBoolean LGNC_eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
 {
