@@ -29,7 +29,7 @@ set(SRC
     "src/lgnc_system.c"
 )
 
-add_library(lgncopenapi ${HEADERS} ${SRC})
+add_library(lgncopenapi SHARED ${HEADERS} ${SRC})
 
 set_target_properties(lgncopenapi PROPERTIES
     VERSION               ${PROJECT_VERSION}
